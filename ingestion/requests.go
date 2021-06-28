@@ -104,6 +104,51 @@ func (c *client) makeEngageBatchRequest(batch []profile.Mutator) (*http.Request,
 	return makeFormURLEncodedPost(c.endpoint.engage.batch.String(), body)
 }
 
+func (c *client) makeGroupRequest(action profile.Mutator) (*http.Request, error) {
+	var url string
+
+	switch action.(type) {
+	default:
+		return nil, fmt.Errorf("unsupported group action type %T", action)
+	case nil:
+		return nil, fmt.Errorf("group action is nil")
+	case *profile.Set:
+		url = c.endpoint.group.set.String()
+	case *profile.SetOnce:
+		url = c.endpoint.group.setOnce.String()
+	}
+
+	data, err := json.Marshal(action)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := form.NewValues(data, form.WithVerboseResponse(true))
+	if err != nil {
+		return nil, err
+	}
+
+	return makeFormURLEncodedPost(url, body)
+}
+
+func (c *client) makeGroupBatchRequest(batch []profile.Mutator) (*http.Request, error) {
+	if len(batch) == 0 {
+		return nil, fmt.Errorf("empty profiles batch")
+	}
+
+	data, err := json.Marshal(batch)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := form.NewValues(data, form.WithVerboseResponse(true))
+	if err != nil {
+		return nil, err
+	}
+
+	return makeFormURLEncodedPost(c.endpoint.group.batch.String(), body)
+}
+
 func makeEventForm(obj *event.Data, options ...form.OptionalValue) (*url.Values, error) {
 	if obj == nil {
 		return nil, fmt.Errorf("event object is nil")
