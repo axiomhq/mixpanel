@@ -47,6 +47,11 @@ type client struct {
 			unset   *url.URL
 			batch   *url.URL
 		}
+		group struct {
+			set     *url.URL
+			setOnce *url.URL
+			batch   *url.URL
+		}
 	}
 	httpc HTTPDoer
 	agent string
@@ -83,6 +88,10 @@ func NewClient(serverURL string, options ...ClientOption) (Client, error) {
 	cli.endpoint.engage.remove = serverRef("/engage", "profile-list-remove")
 	cli.endpoint.engage.unset = serverRef("/engage", "profile-unset")
 	cli.endpoint.engage.batch = serverRef("/engage", "profile-batch-update")
+
+	cli.endpoint.group.set = serverRef("/group", "group-set")
+	cli.endpoint.group.setOnce = serverRef("/group", "group-set-once")
+	cli.endpoint.group.batch = serverRef("/group", "group-batch-update")
 
 	cli.httpc = &http.Client{
 		Transport: &http.Transport{
@@ -181,6 +190,24 @@ func (c *client) Engage(ctx context.Context, action profile.Mutator) error {
 
 func (c *client) EngageBatch(ctx context.Context, batch []profile.Mutator) error {
 	req, err := c.makeEngageBatchRequest(batch)
+	if err != nil {
+		return nil
+	}
+
+	return c.send(ctx, req)
+}
+
+func (c *client) Group(ctx context.Context, action profile.Mutator) error {
+	req, err := c.makeGroupRequest(action)
+	if err != nil {
+		return err
+	}
+
+	return c.send(ctx, req)
+}
+
+func (c *client) GroupBatch(ctx context.Context, batch []profile.Mutator) error {
+	req, err := c.makeGroupBatchRequest(batch)
 	if err != nil {
 		return nil
 	}
