@@ -26,6 +26,8 @@ type Client interface {
 	TrackBatch(context.Context, []*event.Data) error
 	Engage(context.Context, profile.Mutator) error
 	EngageBatch(context.Context, []profile.Mutator) error
+	Group(context.Context, profile.Mutator) error
+	GroupBatch(context.Context, []profile.Mutator) error
 }
 
 // TrackBatchLimit is Mixpanel limitation for events batch.
