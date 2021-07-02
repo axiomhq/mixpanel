@@ -113,10 +113,16 @@ func (c *client) makeGroupRequest(action group.Mutator) (*http.Request, error) {
 		return nil, fmt.Errorf("unsupported group action type %T", action)
 	case nil:
 		return nil, fmt.Errorf("group action is nil")
-	case *profile.Set:
+	case *group.Set:
 		url = c.endpoint.group.set.String()
-	case *profile.SetOnce:
+	case *group.SetOnce:
 		url = c.endpoint.group.setOnce.String()
+	case *group.ListAppend:
+		url = c.endpoint.group.append.String()
+	case *group.ListRemove:
+		url = c.endpoint.group.remove.String()
+	case *group.Unset:
+		url = c.endpoint.group.unset.String()
 	}
 
 	data, err := json.Marshal(action)

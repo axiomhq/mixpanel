@@ -27,8 +27,8 @@ type Client interface {
 	TrackBatch(context.Context, []*event.Data) error
 	Engage(context.Context, profile.Mutator) error
 	EngageBatch(context.Context, []profile.Mutator) error
-	Group(context.Context, profile.Mutator) error
-	GroupBatch(context.Context, []profile.Mutator) error
+	Group(context.Context, group.Mutator) error
+	GroupBatch(context.Context, []group.Mutator) error
 }
 
 // TrackBatchLimit is Mixpanel limitation for events batch.
@@ -53,6 +53,9 @@ type client struct {
 		group struct {
 			set     *url.URL
 			setOnce *url.URL
+			append  *url.URL
+			remove  *url.URL
+			unset   *url.URL
 			batch   *url.URL
 		}
 	}
@@ -92,9 +95,12 @@ func NewClient(serverURL string, options ...ClientOption) (Client, error) {
 	cli.endpoint.engage.unset = serverRef("/engage", "profile-unset")
 	cli.endpoint.engage.batch = serverRef("/engage", "profile-batch-update")
 
-	cli.endpoint.group.set = serverRef("/group", "group-set")
-	cli.endpoint.group.setOnce = serverRef("/group", "group-set-once")
-	cli.endpoint.group.batch = serverRef("/group", "group-batch-update")
+	cli.endpoint.group.set = serverRef("/groups", "group-set")
+	cli.endpoint.group.setOnce = serverRef("/groups", "group-set-once")
+	cli.endpoint.engage.append = serverRef("/groups", "group-union")
+	cli.endpoint.engage.remove = serverRef("/groups", "group-remove-from-list")
+	cli.endpoint.engage.unset = serverRef("/groups", "group-unset")
+	cli.endpoint.group.batch = serverRef("/groups", "group-batch-update")
 
 	cli.httpc = &http.Client{
 		Transport: &http.Transport{
