@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/wtask-go/mixpanel/ingestion/event"
+	"github.com/wtask-go/mixpanel/ingestion/group"
 	"github.com/wtask-go/mixpanel/ingestion/profile"
 	"github.com/wtask-go/mixpanel/internal/form"
 )
@@ -104,7 +105,7 @@ func (c *client) makeEngageBatchRequest(batch []profile.Mutator) (*http.Request,
 	return makeFormURLEncodedPost(c.endpoint.engage.batch.String(), body)
 }
 
-func (c *client) makeGroupRequest(action profile.Mutator) (*http.Request, error) {
+func (c *client) makeGroupRequest(action group.Mutator) (*http.Request, error) {
 	var url string
 
 	switch action.(type) {
@@ -131,7 +132,7 @@ func (c *client) makeGroupRequest(action profile.Mutator) (*http.Request, error)
 	return makeFormURLEncodedPost(url, body)
 }
 
-func (c *client) makeGroupBatchRequest(batch []profile.Mutator) (*http.Request, error) {
+func (c *client) makeGroupBatchRequest(batch []group.Mutator) (*http.Request, error) {
 	if len(batch) == 0 {
 		return nil, fmt.Errorf("empty profiles batch")
 	}

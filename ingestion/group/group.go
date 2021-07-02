@@ -53,7 +53,6 @@ type Mutator interface {
 
 func (x Set) isMutator()        {}
 func (x SetOnce) isMutator()    {}
-func (x NumberAdd) isMutator()  {}
 func (x ListAppend) isMutator() {}
 func (x ListRemove) isMutator() {}
 func (x Unset) isMutator()      {}
