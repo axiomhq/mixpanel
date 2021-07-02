@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/wtask-go/mixpanel/ingestion/event"
+	"github.com/wtask-go/mixpanel/ingestion/group"
 	"github.com/wtask-go/mixpanel/ingestion/profile"
 )
 
@@ -199,7 +200,7 @@ func (c *client) EngageBatch(ctx context.Context, batch []profile.Mutator) error
 	return c.send(ctx, req)
 }
 
-func (c *client) Group(ctx context.Context, action profile.Mutator) error {
+func (c *client) Group(ctx context.Context, action group.Mutator) error {
 	req, err := c.makeGroupRequest(action)
 	if err != nil {
 		return err
@@ -208,7 +209,7 @@ func (c *client) Group(ctx context.Context, action profile.Mutator) error {
 	return c.send(ctx, req)
 }
 
-func (c *client) GroupBatch(ctx context.Context, batch []profile.Mutator) error {
+func (c *client) GroupBatch(ctx context.Context, batch []group.Mutator) error {
 	req, err := c.makeGroupBatchRequest(batch)
 	if err != nil {
 		return nil
