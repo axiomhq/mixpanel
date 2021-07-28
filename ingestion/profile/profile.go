@@ -8,6 +8,7 @@ package profile
 type Set struct {
 	Token      string                 `json:"$token"`
 	DistinctID string                 `json:"$distinct_id"`
+	IP         string                 `json:"$ip,omitempty"`
 	Set        map[string]interface{} `json:"$set"`
 }
 
@@ -17,6 +18,7 @@ type Set struct {
 type SetOnce struct {
 	Token      string                 `json:"$token"`
 	DistinctID string                 `json:"$distinct_id"`
+	IP         string                 `json:"$ip,omitempty"`
 	SetOnce    map[string]interface{} `json:"$set_once"`
 }
 
@@ -25,6 +27,7 @@ type SetOnce struct {
 type NumberAdd struct {
 	Token      string                 `json:"$token"`
 	DistinctID string                 `json:"$distinct_id"`
+	IP         string                 `json:"$ip,omitempty"`
 	Add        map[string]interface{} `json:"$add"`
 }
 
@@ -32,6 +35,7 @@ type NumberAdd struct {
 type ListAppend struct {
 	Token      string                 `json:"$token"`
 	DistinctID string                 `json:"$distinct_id"`
+	IP         string                 `json:"$ip,omitempty"`
 	Append     map[string]interface{} `json:"$append"`
 }
 
@@ -39,6 +43,7 @@ type ListAppend struct {
 type ListRemove struct {
 	Token      string                 `json:"$token"`
 	DistinctID string                 `json:"$distinct_id"`
+	IP         string                 `json:"$ip,omitempty"`
 	Remove     map[string]interface{} `json:"$remove"`
 }
 
@@ -46,6 +51,7 @@ type ListRemove struct {
 type Unset struct {
 	Token      string   `json:"$token"`
 	DistinctID string   `json:"$distinct_id"`
+	IP         string   `json:"$ip,omitempty"`
 	Unset      []string `json:"$unset"`
 }
 
